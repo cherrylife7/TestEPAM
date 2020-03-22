@@ -122,5 +122,78 @@ namespace TestEPAM
             Console.WriteLine(fact);
             return fact;
         }
+
+        public static bool IsValidString(string text)
+        {
+            //Splitting the string to an array of chars
+            char[] arr = text.ToCharArray();
+            bool result = true;
+
+            //List of uncoupled opening braces
+            List<char> listChar = new List<char>();
+
+            //Looping through the array
+            foreach(char c in arr)
+            {
+                //Checking if the element is a certain opening character
+                if (c == '(' || c == '[' || c == '{')
+                {
+                    //Adding the opening character to the list
+                    listChar.Add(c);
+                }
+                //Checking if the element is a certain closing character
+                else if (c == ')' || c == ']' || c == '}')
+                {
+                    if (listChar.Count != 0)
+                    {
+                        //Checking whether the opening and the closing characters match
+                        if (isSameType(listChar[listChar.Count - 1], c))
+                        {
+                            //Removing verified characters from the list
+                            listChar.RemoveAt(listChar.Count - 1);
+                        }
+                        else
+                        {
+                            result = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+
+            //Last check
+            if(result == true && listChar.Count != 0)
+            {
+                result = false;
+            }
+
+            //Showing result
+            Console.WriteLine("\nIs string valid:");
+            Console.WriteLine(result);
+
+            return result;
+        }
+
+        private static bool isSameType(char one, char two)
+        {
+            if(one == '(' && two == ')')
+            {
+                return true;
+            }else if(one == '[' && two == ']')
+            {
+                return true;
+            }
+            else if (one == '{' && two == '}')
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
